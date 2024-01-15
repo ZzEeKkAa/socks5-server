@@ -1,6 +1,6 @@
 module github.com/serjs/socks5-server
 
-go 1.19
+go 1.21
 
 require (
 	github.com/caarlos0/env/v6 v6.10.1
