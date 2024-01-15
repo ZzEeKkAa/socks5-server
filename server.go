@@ -53,7 +53,9 @@ func main() {
 		for i, ip := range cfg.AllowedIPs {
 			whitelist[i] = net.ParseIP(ip)
 		}
-		server.SetIPWhitelist(whitelist)
+		// TODO: was vendored patched, find better approach:
+		// https://github.com/serjs/socks5-server/pull/43
+		// server.SetIPWhitelist(whitelist)
 	}
 
 	log.Printf("Start listening proxy service on port %s\n", cfg.Port)
