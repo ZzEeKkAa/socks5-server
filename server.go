@@ -13,6 +13,7 @@ type params struct {
 	User            string   `env:"PROXY_USER" envDefault:""`
 	Password        string   `env:"PROXY_PASSWORD" envDefault:""`
 	Port            string   `env:"PROXY_PORT" envDefault:"1080"`
+	UDPPort         int      `env:"UDP_PORT" envDefault:"1080"`
 	AllowedDestFqdn string   `env:"ALLOWED_DEST_FQDN" envDefault:""`
 	AllowedIPs      []string `env:"ALLOWED_IPS" envSeparator:"," envDefault:""`
 }
@@ -27,7 +28,8 @@ func main() {
 
 	//Initialize socks5 config
 	socks5conf := &socks5.Config{
-		Logger: log.New(os.Stdout, "", log.LstdFlags),
+		Logger:   log.New(os.Stdout, "", log.LstdFlags),
+		BindPort: cfg.UDPPort,
 	}
 
 	if cfg.User+cfg.Password != "" {
@@ -58,7 +60,10 @@ func main() {
 		// server.SetIPWhitelist(whitelist)
 	}
 
-	log.Printf("Start listening proxy service on port %s\n", cfg.Port)
+	log.Printf(
+		"Start listening proxy service on port %s with UDP server on %d\n",
+		cfg.Port, cfg.UDPPort,
+	)
 	if err := server.ListenAndServe("tcp", ":"+cfg.Port); err != nil {
 		log.Fatal(err)
 	}
